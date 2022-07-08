@@ -1,3 +1,5 @@
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -7,9 +9,11 @@ public class Bai1 {
         Set<Integer> set1 = getSet();
         Set<Integer> set2 = getSetBaseOnOldSet(set1);
         System.out.println(set2.size());
+        LocalTime start = LocalTime.now();
         Set<Integer> tapHop = timHop(set1, set2);
         Set<Integer> tapGiao = timGiao(set1, set2, tapHop);
-        System.out.println(tapGiao.size());
+        LocalTime end = LocalTime.now();
+        System.out.println(ChronoUnit.NANOS.between(start, end));
     }
 
     public static Set<Integer> getSet() {
