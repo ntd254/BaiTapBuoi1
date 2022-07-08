@@ -8,7 +8,6 @@ public class Bai1 {
     public static void main(String[] args) {
         Set<Integer> set1 = getSet();
         Set<Integer> set2 = getSetBaseOnOldSet(set1);
-        System.out.println(set2.size());
         LocalTime start = LocalTime.now();
         Set<Integer> tapHop = timHop(set1, set2);
         Set<Integer> tapGiao = timGiao(set1, set2, tapHop);
