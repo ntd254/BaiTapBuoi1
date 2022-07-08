@@ -10,8 +10,9 @@ public class Bai1 {
         Set<Integer> set2 = getSetBaseOnOldSet(set1);
         LocalTime start = LocalTime.now();
         Set<Integer> tapHop = timHop(set1, set2);
-        Set<Integer> tapGiao = timGiao(set1, set2, tapHop);
+        Set<Integer> tapGiao = timGiao(set1, set2);
         LocalTime end = LocalTime.now();
+        System.out.println(tapGiao.size());
         System.out.println(ChronoUnit.NANOS.between(start, end));
     }
 
@@ -45,10 +46,18 @@ public class Bai1 {
         return tapHop;
     }
 
-    public static Set<Integer> timGiao(Set<Integer> set1, Set<Integer> set2, Set<Integer> tapHop) {
+    public static Set<Integer> timGiao(Set<Integer> set1, Set<Integer> set2) {
+        Set<Integer> tapGiao = new HashSet<>(set1);
+        tapGiao.retainAll(set2);
+        return tapGiao;
+    }
+
+    public static Set<Integer> timGiao1(Set<Integer> set1, Set<Integer> set2, Set<Integer> tapHop) {
         Set<Integer> tapGiao = new HashSet<>();
         for (int num : tapHop) {
-            if (set1.contains(num) && set2.contains(num)) tapGiao.add(num);
+            if (set1.contains(num) && set2.contains(num)) {
+                tapGiao.add(num);
+            }
         }
         return tapGiao;
     }
