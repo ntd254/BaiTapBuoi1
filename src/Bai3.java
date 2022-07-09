@@ -1,16 +1,18 @@
 import javax.swing.plaf.ComponentUI;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.*;
 
 public class Bai3 {
     public static void main(String[] args) throws InterruptedException {
+        LocalTime start = LocalTime.now();
         ExecutorService threadPool = Executors.newFixedThreadPool(6);
         File folderInput_3 = new File("./input_3");
         Map<String, Integer> map = new ConcurrentHashMap<>();
         List<CompletableFuture<Void>> listOfFuture = new ArrayList<>();
-
         for (File file : folderInput_3.listFiles()) {
             listOfFuture.add(CompletableFuture.runAsync(() -> {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -53,7 +55,8 @@ public class Bai3 {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(listOfFrequency.get(listOfFrequency.size() - 1).getValue());
+            LocalTime end = LocalTime.now();
+            System.out.println(ChronoUnit.NANOS.between(start, end));
         });
         threadPool.shutdown();
     }
