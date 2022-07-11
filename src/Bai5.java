@@ -1,6 +1,6 @@
-package main;
-
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 import javax.swing.*;
 
 class Maze {
@@ -44,8 +44,8 @@ class Maze {
             // Kích thước ma trận
             sizeh = 21;
             sizew = 31;
-            start = 10;
-            end = 0;
+            start = 10; // y
+            end = 0; // x
             solve();
             repaint(); // vẽ ma trận và lời giải
         }
@@ -63,6 +63,29 @@ class Maze {
         public void solve() {
             // Hàm này chứa phương pháp tìm đường từ điểm start đến vị
             // trí màu đỏ trên ma trận
+            Stack<Point> stack = new Stack<>();
+            Set<Point> visistedPoints = new HashSet<>();
+            Point start = new Point(this.end, this.start);
+            start.setPreviousPoint(null);
+            stack.add(start);
+            visistedPoints.add(start);
+            while (! stack.empty()) {
+                Point point = stack.pop();
+                System.out.println(point.x + "   " + point.y);
+                visistedPoints.add(point);
+                if (maze[point.y][point.x] == 2) {
+                    for (Point previousPoint = point.previousPoint; previousPoint != null; previousPoint = previousPoint.getPreviousPoint()) {
+                        maze[previousPoint.y][previousPoint.x] = 3;
+                    }
+                    break;
+                }
+                for (Point temp : point.getAdjacentPoint()) {
+                    if (!visistedPoints.contains(temp)) {
+                        temp.setPreviousPoint(point);
+                        stack.push(temp);
+                    }
+                }
+            }
         }
 
         public void paintComponent(Graphics g) // vẽ ma trận + lời giải
@@ -82,6 +105,46 @@ class Maze {
                         g.setColor(Color.blue); // blue là màu của lời giải
                     g.fillRect(j * 20, i * 20, 20, 20);
                 }
+        }
+
+        public class Point {
+            private int x;
+            private int y;
+            private Point previousPoint;
+            public Point(int x, int y) {
+                this.y = y;
+                this.x = x;
+            }
+
+            public ArrayList<Point> getAdjacentPoint() {
+                ArrayList<Point> list = new ArrayList<>();
+                if (this.y > 0 && (maze[this.y-1][this.x] == 0 || maze[this.y-1][this.x] == 2)) list.add(new Point(this.x, this.y-1));
+                if (this.y < 19 && (maze[this.y+1][this.x] == 0 || maze[this.y+1][this.x] == 2)) list.add((new Point(this.x, this.y+1)));
+                if (this.x > 0 && (maze[this.y][this.x-1] == 0 || maze[this.y][this.x-1] == 2)) list.add(new Point(this.x-1, this.y));
+                if (this.x < 29 && (maze[this.y][this.x+1] == 0 || maze[this.y][this.x+1] == 2)) list.add(new Point(this.x+1, this.y));
+                return list;
+            }
+
+            public void setPreviousPoint(Point previousPoint) {
+                this.previousPoint = previousPoint;
+            }
+
+            public Point getPreviousPoint() {
+                return previousPoint;
+            }
+
+            @Override
+            public boolean equals(Object obj) {
+                if (obj == null) return false;
+                if (obj.getClass() != this.getClass()) return false;
+                Point anotherPoint = (Point) obj;
+                return this.x == anotherPoint.x && this.y == anotherPoint.y;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(this.x, this.y);
+            }
         }
     }
 }
