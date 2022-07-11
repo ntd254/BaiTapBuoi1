@@ -71,7 +71,6 @@ class Maze {
             visistedPoints.add(start);
             while (! stack.empty()) {
                 Point point = stack.pop();
-                System.out.println(point.x + "   " + point.y);
                 visistedPoints.add(point);
                 if (maze[point.y][point.x] == 2) {
                     for (Point previousPoint = point.previousPoint; previousPoint != null; previousPoint = previousPoint.getPreviousPoint()) {
